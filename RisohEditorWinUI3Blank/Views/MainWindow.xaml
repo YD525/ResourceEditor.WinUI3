@@ -66,10 +66,12 @@
             Grid.Column="1"
             Margin="0"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
+            VerticalAlignment="Stretch"
+            IsAddTabButtonVisible="False"
+            >
 
             <!-- 主文档/编辑页（保留原有绑定显示） -->
-            <muxc:TabViewItem Header="代码" x:Name="DocTab">
+            <muxc:TabViewItem Header="代码" x:Name="DocTab" IsClosable="False">
                 <!-- 在 Border 上保留内边距以提供视觉间距 -->
                 <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Margin="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ScrollViewer>
@@ -91,13 +93,12 @@
             </muxc:TabViewItem>
 
             <!-- 示例：属性/视图页（占位） -->
-            <muxc:TabViewItem Header="十六进制" x:Name="PropertiesTab">
-                <StackPanel Padding="12">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-    VerticalScrollBarVisibility="Visible">
-                        <TextBox x:Name="m_hexViewer" IsReadOnly="True" Text="属性面板占位符"  AcceptsReturn="True"/>
+            <muxc:TabViewItem Header="十六进制" x:Name="PropertiesTab" IsClosable="False">
+                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Margin="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                        <TextBox x:Name="m_hexViewer" IsReadOnly="True" Text="属性面板占位符" AcceptsReturn="True"/>
                     </ScrollViewer>
-                </StackPanel>
+                </Border> 
             </muxc:TabViewItem>
         </muxc:TabView>
     </Grid>
