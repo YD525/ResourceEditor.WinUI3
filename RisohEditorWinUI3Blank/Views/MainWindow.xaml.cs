@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging; 
 using RisohEditorWinUI3Blank.Models;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -73,8 +74,9 @@ namespace RisohEditorWinUI3Blank
 
         private async void Open_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new ContentDialog { Title = "打开", Content = "打开（示例）", CloseButtonText = "确定" };
-            await dlg.ShowAsync();
+            //var dlg = new ContentDialog { Title = "打开", Content = "打开（示例）", CloseButtonText = "确定" };
+            //await dlg.ShowAsync();
+            await OnOpen();
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
@@ -1075,9 +1077,17 @@ namespace RisohEditorWinUI3Blank
         public struct DataStruct
         {
             public object Tag;
-            public string Content;
+            public object Content;
             public string ImageKey;
             public string SelectedImageKey;
+            public override string ToString()
+            {
+                if(Tag is IGrouping<string,ResourceEntry> obj)
+                {
+                    return $"{obj.Key} ({obj.Count()})";
+                }else
+                    return Tag.ToString()??"";
+            }
         }
 
 
@@ -1089,27 +1099,27 @@ namespace RisohEditorWinUI3Blank
 
             try
             {
+                m_treeView.RootNodes.Clear();
                 // 按类型组织资源
                 var resourcesByType = g_res.GroupByType();
 
                 foreach (var group in resourcesByType)
                 {
-                    var dataRoot = new DataStruct();
-                    dataRoot.Tag = group.Key;
-                    dataRoot.Content = $"{group.Key} ({group.Count()})";
-                    var typeNode = new TreeViewNode() { Content= dataRoot }; 
-                    m_treeView.RootNodes.Add(typeNode); 
+                    var typeNode = new TreeViewNode() { Content = new DataStruct() {Tag= $"{group.Key} ({group.Count()})" } };
+
                     foreach (var resource in group)
                     {
                         string resourceName = GetResourceDisplayName(resource);
-                        TreeViewNode resourceNode = new TreeViewNode() { Content= resourceName };
+                        
                         var dataNode = new DataStruct();
-                        dataNode.Tag = resource;
+                        dataNode.Tag = resourceName;
+                        dataNode.Content = resource;
                         dataNode.ImageKey = "resource";
                         dataNode.SelectedImageKey = "resource";
+                        TreeViewNode resourceNode = new TreeViewNode() { Content = dataNode };
                         typeNode.Children.Add(resourceNode);
                     }
-
+                    m_treeView.RootNodes.Add(typeNode);
                     typeNode.IsExpanded = false;
                 }
 
@@ -1141,8 +1151,8 @@ namespace RisohEditorWinUI3Blank
 
         private void m_treeView_SelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
         {
-            
-            if (sender.SelectedNode.Content is ResourceEntry entry)
+            if(sender.SelectedNode.Content is DataStruct ds)
+            if (ds.Content is ResourceEntry entry)
             {
                 SelectResource(entry);
             }
@@ -1156,7 +1166,7 @@ namespace RisohEditorWinUI3Blank
             }
         }
 
-        private void SelectResource(ResourceEntry entry, bool doubleClick = false)
+        private async Task SelectResource(ResourceEntry entry, bool doubleClick = false)
         {
             if (entry == null) return;
 
@@ -1183,6 +1193,7 @@ namespace RisohEditorWinUI3Blank
             }
             else
             {
+                image1.Source =await ToBitmapSource(entry.Data);
                 //MyTool.BitmapHelper.ParseAndDisplayBitmap(entry.Data, image1);
                 //string debugInfo = BitmapHelper.GetDetailedAnalysis(entry.Data);
                 //m_bmpView.BackgroundImage = null;

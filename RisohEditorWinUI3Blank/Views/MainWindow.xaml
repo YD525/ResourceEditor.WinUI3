@@ -57,7 +57,7 @@
         </muxc:MenuBar>
 
         <!-- 左侧：树形目录 -->
-        <muxc:TreeView x:Name="m_treeView" Grid.Row="1" Grid.Column="0" SelectionChanged="m_treeView_SelectionChanged" ItemInvoked="NavigationTree_ItemInvoked"/>
+        <muxc:TreeView x:Name="m_treeView" Grid.Row="1" Grid.Column="0" SelectionChanged="m_treeView_SelectionChanged"  ItemInvoked="NavigationTree_ItemInvoked"/>
 
         <!-- 右侧：内容区，改为 TabView 并占满整个单元格 -->
         <muxc:TabView
