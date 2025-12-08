@@ -384,7 +384,7 @@ namespace RisohEditorWinUI3Blank
                 if (DoLoadFile(path))
                 {
                     string GetFileName = path.Substring(path.LastIndexOf(@"\") + 1) ;
-                    //FileSwitcher.Children.Add(new EditorTab(GetFileName));
+                    //FileSwitcher.Children.Add(new EditorTab(path,GetFileName));
                 }
             }
         }

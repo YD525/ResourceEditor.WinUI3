@@ -18,9 +18,12 @@ namespace RisohEditorWinUI3Blank.UIExtend
 
         public delegate void Click(string FileName);
         public static Click? OneFileClick = null;
-        public EditorTab(string FileName)
+
+       
+        public EditorTab(string UniqueKey,string FileName)
         {
             this.InitializeComponent();
+            this.UniqueKey = UniqueKey;
             this.FileName = FileName;
         }
         public string FileName
@@ -41,6 +44,22 @@ namespace RisohEditorWinUI3Blank.UIExtend
                 new PropertyMetadata(string.Empty)
         );
 
+        private string UniqueKey
+        {
+            get { return (string)GetValue(UniqueKeyProperty); }
+            set
+            {
+                SetValue(UniqueKeyProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty UniqueKeyProperty =
+         DependencyProperty.Register(
+             nameof(UniqueKey),
+             typeof(string),
+             typeof(EditorTab),
+             new PropertyMetadata(string.Empty)
+        );
 
         public static string ActiveTabName = "";
         public EditorTab()
@@ -55,14 +74,13 @@ namespace RisohEditorWinUI3Blank.UIExtend
 
         private void FontIcon_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            string GetCloseFileName = this.LFileName.Text;
             if (this.Parent is StackPanel Panel)
             {
                 Panel.Children.Remove(this);
             }
 
             if (EditorTab.OneFileClose!=null)
-            EditorTab.OneFileClose(GetCloseFileName);
+            EditorTab.OneFileClose(this.UniqueKey);
         }
 
         public Color EnterColor = Color.FromArgb(255, 50, 50, 50);
@@ -78,13 +96,18 @@ namespace RisohEditorWinUI3Blank.UIExtend
 
         public void Border_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            if (EditorTab.ActiveTabName != this.LFileName.Text)
+            Close();
+        }
+
+        private void Close()
+        {
+            if (EditorTab.ActiveTabName != this.UniqueKey)
                 MainBorder.Background = new SolidColorBrush(LeaveColor);
         }
 
         private void Border_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            EditorTab.ActiveTabName = this.LFileName.Text;
+            EditorTab.ActiveTabName = this.UniqueKey;
 
             if (LastEnterBorder != null)
                 LastEnterBorder.Background = new SolidColorBrush(EnterColor);
@@ -93,7 +116,7 @@ namespace RisohEditorWinUI3Blank.UIExtend
 
             if (EditorTab.OneFileClick != null)
             {
-                EditorTab.OneFileClick(this.LFileName.Text);
+                EditorTab.OneFileClick(this.UniqueKey);
             }
         }
 
@@ -103,7 +126,7 @@ namespace RisohEditorWinUI3Blank.UIExtend
             {
                 foreach (var Child in ParentPanel.Children)
                 {
-                    ((EditorTab)Child).Border_PointerExited(null, null);
+                    ((EditorTab)Child).Close();
                 }
             }
         }
