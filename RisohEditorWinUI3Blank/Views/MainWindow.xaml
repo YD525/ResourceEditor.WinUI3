@@ -18,7 +18,7 @@
     <!--CustomWin-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="41"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
@@ -27,11 +27,30 @@
 
         <Grid x:Name="Form" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="41"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Style="{StaticResource GridColor}">
+            <Grid Grid.Row="0">
+                <CommandBar HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="Transparent" IsOpen="False" DefaultLabelPosition="Collapsed" Height="48">
+                    <AppBarButton Icon="OpenFile" Label="Open"/>
+                    <AppBarButton Icon="Save" Label="Save"/>
+                    <AppBarButton Label="SaveAs">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE792;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Icon="Import" Label="Import"/>
+                    <AppBarButton Label="Import">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDE1;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
+                <AppBarButton Icon="Setting" HorizontalAlignment="Right" Height="40" VerticalAlignment="Center" VerticalContentAlignment="Center" Label="Setting" />
+            </Grid>
+            <Grid Grid.Row="1" Style="{StaticResource GridColor}">
                 <ScrollView VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
 
                     <TabView x:Name="Tabs" AddTabButtonClick="AddTab">
@@ -41,7 +60,7 @@
                 </ScrollView>
             </Grid>
 
-            <Grid x:Name="RootGrid" Grid.Row="1" Style="{StaticResource GridColor}">
+            <Grid x:Name="RootGrid" Grid.Row="2" Style="{StaticResource GridColor}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="50"/>
