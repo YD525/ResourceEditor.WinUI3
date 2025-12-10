@@ -54,13 +54,16 @@
                 <ScrollView VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
 
                     <TabView x:Name="Tabs" AddTabButtonClick="AddTab">
+                       
                     </TabView>
-
 
                 </ScrollView>
             </Grid>
 
-            <Grid x:Name="RootGrid" Grid.Row="2" Style="{StaticResource GridColor}">
+            <Grid Grid.Row="1" Name="Views">
+            </Grid>
+
+            <!--<Grid x:Name="RootGrid" Grid.Row="1" Style="{StaticResource GridColor}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="50"/>
@@ -73,10 +76,10 @@
 
                
 
-                <!-- 左侧：树形目录 -->
+                --><!-- 左侧：树形目录 --><!--
                 <muxc:TreeView x:Name="m_treeView" Grid.Row="2" Grid.Column="0" SelectionChanged="m_treeView_SelectionChanged"  ItemInvoked="NavigationTree_ItemInvoked"/>
 
-                <!-- 右侧：内容区，改为 TabView 并占满整个单元格 -->
+                --><!-- 右侧：内容区，改为 TabView 并占满整个单元格 --><!--
                 <muxc:TabView
             x:Name="MainTabView"
             Grid.Row="1"
@@ -87,9 +90,9 @@
             IsAddTabButtonVisible="False"
             >
 
-                    <!-- 主文档/编辑页（保留原有绑定显示） -->
+                    --><!-- 主文档/编辑页（保留原有绑定显示） --><!--
                     <muxc:TabViewItem Header="代码" x:Name="DocTab" IsClosable="False">
-                        <!-- 在 Border 上保留内边距以提供视觉间距 -->
+                        --><!-- 在 Border 上保留内边距以提供视觉间距 --><!--
                         <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Margin="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <ScrollViewer>
                                 <Grid>
@@ -109,7 +112,7 @@
                         </Border>
                     </muxc:TabViewItem>
 
-                    <!-- 示例：属性/视图页（占位） -->
+                    --><!-- 示例：属性/视图页（占位） --><!--
                     <muxc:TabViewItem Header="十六进制" x:Name="PropertiesTab" IsClosable="False">
                         <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Margin="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
@@ -118,7 +121,7 @@
                         </Border>
                     </muxc:TabViewItem>
                 </muxc:TabView>
-            </Grid>
+            </Grid>-->
 
         </Grid>
 

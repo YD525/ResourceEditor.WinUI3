@@ -5,10 +5,12 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging; 
+using Microsoft.UI.Xaml.Media.Imaging;
+using RisohEditorWinUI3Blank.DataManagement;
 using RisohEditorWinUI3Blank.Models;
 using RisohEditorWinUI3Blank.UIExtend;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,6 +28,8 @@ namespace RisohEditorWinUI3Blank
     {
         private bool _sidebarVisible = true;
         IntPtr hWnd=IntPtr.Zero;
+
+        public TabManager? TopTab = null;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -35,72 +39,50 @@ namespace RisohEditorWinUI3Blank
             g_hMainWnd = WinRT.Interop.WindowNative.GetWindowHandle(this); ;
             //ParseCommandLine(args);
 
-            InitializeNavigationTree();
+            //InitializeNavigationTree();
 
             //Use borderless form
             this.ExtendsContentIntoTitleBar = true;
             this.SetTitleBar(TitleBar);
             UIHelper.ApplyDarkStyle(TitleBar);
 
-
-            Application.Current.Resources["TabViewItemSelectedBackground"] = new SolidColorBrush(UIHelper.TabViewSelectColor);
-
+            //Set tab manage
+            TopTab = new TabManager(this.Tabs);
         }
         #region 暂时保留的内容
 
-        /// <summary>
-        /// EditorTab close callback
-        /// </summary>
-        /// <param name="FileName"></param>
-        private void AnyFileClose(string FileName)
-        {
-            //在这里 销毁 View
-        }
+        //private void InitializeNavigationTree()
+        //{
+        //    // 示例节点：可以根据实际数据动态构建
+        //    var root1 = new TreeViewNode { Content = "项目 A" };
+        //    root1.Children.Add(new TreeViewNode { Content = "文件 A1.txt" });
+        //    root1.Children.Add(new TreeViewNode { Content = "文件 A2.txt" });
 
-        private void AnyFileClick(string FileName)
-        {
-            //在这里 执行 View切换逻辑
-        }
+        //    var root2 = new TreeViewNode { Content = "项目 B" };
+        //    root2.Children.Add(new TreeViewNode { Content = "子项 B1" });
+        //    var sub = new TreeViewNode { Content = "子项 B2" };
+        //    sub.Children.Add(new TreeViewNode { Content = "文件 B2-1.md" });
+        //    root2.Children.Add(sub);
 
-        private void InitializeNavigationTree()
-        {
-            // 示例节点：可以根据实际数据动态构建
-            var root1 = new TreeViewNode { Content = "项目 A" };
-            root1.Children.Add(new TreeViewNode { Content = "文件 A1.txt" });
-            root1.Children.Add(new TreeViewNode { Content = "文件 A2.txt" });
+        //    m_treeView.RootNodes.Clear();
+        //    m_treeView.RootNodes.Add(root1);
+        //    m_treeView.RootNodes.Add(root2);
+        //}
 
-            var root2 = new TreeViewNode { Content = "项目 B" };
-            root2.Children.Add(new TreeViewNode { Content = "子项 B1" });
-            var sub = new TreeViewNode { Content = "子项 B2" };
-            sub.Children.Add(new TreeViewNode { Content = "文件 B2-1.md" });
-            root2.Children.Add(sub);
-
-            m_treeView.RootNodes.Clear();
-            m_treeView.RootNodes.Add(root1);
-            m_treeView.RootNodes.Add(root2);
-        }
-
-        private async void NavigationTree_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
-        {
-            // InvokedItem 通常为节点的 Content（此处我们使用字符串）
-            var invoked = args.InvokedItem;
-            var text = invoked?.ToString() ?? "<空>";
-            //ContentTitle.Text = text;
-            m_codeEditor.Text = $"已选择：{text}\n\n这是示例内容区。你可以在此根据节点加载真实视图或页面。";
-        }
+        //private async void NavigationTree_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+        //{
+        //    // InvokedItem 通常为节点的 Content（此处我们使用字符串）
+        //    var invoked = args.InvokedItem;
+        //    var text = invoked?.ToString() ?? "<空>";
+        //    //ContentTitle.Text = text;
+        //    m_codeEditor.Text = $"已选择：{text}\n\n这是示例内容区。你可以在此根据节点加载真实视图或页面。";
+        //}
 
         // 以下为已有菜单处理器（示例占位）
         private async void New_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new ContentDialog { Title = "新建", Content = "新建（示例）", CloseButtonText = "确定" };
             await dlg.ShowAsync();
-        }
-
-        private async void Open_Click(object sender, RoutedEventArgs e)
-        {
-            //var dlg = new ContentDialog { Title = "打开", Content = "打开（示例）", CloseButtonText = "确定" };
-            //await dlg.ShowAsync();
-            await OnOpen();
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
@@ -146,19 +128,19 @@ namespace RisohEditorWinUI3Blank
 
         private async void ToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
-            var col = RootGrid.ColumnDefinitions[0];
-            if (_sidebarVisible)
-            {
-                col.Width = new Microsoft.UI.Xaml.GridLength(0);
-            }
-            else
-            {
-                col.Width = new Microsoft.UI.Xaml.GridLength(3, Microsoft.UI.Xaml.GridUnitType.Star);
-            }
-            _sidebarVisible = !_sidebarVisible;
+            //var col = RootGrid.ColumnDefinitions[0];
+            //if (_sidebarVisible)
+            //{
+            //    col.Width = new Microsoft.UI.Xaml.GridLength(0);
+            //}
+            //else
+            //{
+            //    col.Width = new Microsoft.UI.Xaml.GridLength(3, Microsoft.UI.Xaml.GridUnitType.Star);
+            //}
+            //_sidebarVisible = !_sidebarVisible;
 
-            var dlg = new ContentDialog { Title = "视图", Content = $"侧边栏：{(_sidebarVisible ? "可见" : "隐藏")}", CloseButtonText = "确定" };
-            await dlg.ShowAsync();
+            //var dlg = new ContentDialog { Title = "视图", Content = $"侧边栏：{(_sidebarVisible ? "可见" : "隐藏")}", CloseButtonText = "确定" };
+            //await dlg.ShowAsync();
         }
 
         private async void ZoomIn_Click(object sender, RoutedEventArgs e)
@@ -345,52 +327,20 @@ namespace RisohEditorWinUI3Blank
             }
         }
 
-        private async Task OnNew()
-        {
-            if (!await DoQuerySaveChange()) return;
+        //private async Task OnNew()
+        //{
+        //    if (!await DoQuerySaveChange()) return;
 
-            g_res.Clear();
-            m_treeView.RootNodes.Clear();
-            m_codeEditor.Text = ""; 
-            m_hexViewer.Text = ""; 
+        //    g_res.Clear();
+        //    m_treeView.RootNodes.Clear();
+        //    m_codeEditor.Text = ""; 
+        //    m_hexViewer.Text = ""; 
 
-            UpdateFileInfo(FileType.FT_NONE, null, false);
-            DoSetFileModified(false);
-        }
+        //    UpdateFileInfo(FileType.FT_NONE, null, false);
+        //    DoSetFileModified(false);
+        //}
 
-        async Task OnOpen()
-        {
-            var picker = new FileOpenPicker()
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.Desktop
-            };
-
-            // 按需添加过滤器
-            picker.FileTypeFilter.Clear();
-            picker.FileTypeFilter.Add(".exe");
-            picker.FileTypeFilter.Add(".dll");
-            picker.FileTypeFilter.Add(".res");
-            picker.FileTypeFilter.Add(".rc");
-            picker.FileTypeFilter.Add("*");
-
-            // 将 WinUI 窗口句柄传入 Picker（必要）
-            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-            InitializeWithWindow.Initialize(picker, hwnd);
-
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // 如果需要绝对路径（桌面应用通常可用），可用 file.Path
-                string path = file.Path;
-                // 调用现有加载逻辑
-                if (DoLoadFile(path))
-                {
-                    string GetFileName = path.Substring(path.LastIndexOf(@"\") + 1) ;
-                    //FileSwitcher.Children.Add(new EditorTab(path,GetFileName));
-                }
-            }
-        }
+       
 
 
         //private async Task OnOpen()
@@ -503,63 +453,7 @@ namespace RisohEditorWinUI3Blank
                     break;
             }
         }
-
-        #region 工具按钮事件处理程序
-        private void m_newButton_Click(object sender, EventArgs e)
-        {
-            OnNew();
-        }
-
-        private void m_openButton_Click(object sender, EventArgs e)
-        {
-            OnOpen();
-        }
-
-        private void m_saveButton_Click(object sender, EventArgs e)
-        {
-            OnSave();
-        }
-
-        private void m_saveAsButton_Click(object sender, EventArgs e)
-        {
-            OnSaveAs();
-        }
-
-        private void m_exitButton_Click(object sender, EventArgs e)
-        {
-            //this.Close();
-        }
-
-        private void m_extractButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_replaceButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_deleteButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_addButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_searchButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_aboutButton_Click(object sender, EventArgs e)
-        {
-
-        }
-        #endregion
+       
 
         private void OnTest()
         {
@@ -1122,44 +1016,44 @@ namespace RisohEditorWinUI3Blank
         // 树视图填充
         private void PopulateTreeView()
         {
-            //m_treeView.BeginUpdate();
-            //m_treeView.Nodes.Clear();
+            ////m_treeView.BeginUpdate();
+            ////m_treeView.Nodes.Clear();
 
-            try
-            {
-                m_treeView.RootNodes.Clear();
-                // 按类型组织资源
-                var resourcesByType = g_res.GroupByType();
+            //try
+            //{
+            //    m_treeView.RootNodes.Clear();
+            //    // 按类型组织资源
+            //    var resourcesByType = g_res.GroupByType();
 
-                foreach (var group in resourcesByType)
-                {
-                    var typeNode = new TreeViewNode() { Content = new DataStruct() {Tag= $"{group.Key} ({group.Count()})" } };
+            //    foreach (var group in resourcesByType)
+            //    {
+            //        var typeNode = new TreeViewNode() { Content = new DataStruct() {Tag= $"{group.Key} ({group.Count()})" } };
 
-                    foreach (var resource in group)
-                    {
-                        string resourceName = GetResourceDisplayName(resource);
+            //        foreach (var resource in group)
+            //        {
+            //            string resourceName = GetResourceDisplayName(resource);
                         
-                        var dataNode = new DataStruct();
-                        dataNode.Tag = resourceName;
-                        dataNode.Content = resource;
-                        dataNode.ImageKey = "resource";
-                        dataNode.SelectedImageKey = "resource";
-                        TreeViewNode resourceNode = new TreeViewNode() { Content = dataNode };
-                        typeNode.Children.Add(resourceNode);
-                    }
-                    m_treeView.RootNodes.Add(typeNode);
-                    typeNode.IsExpanded = false;
-                }
+            //            var dataNode = new DataStruct();
+            //            dataNode.Tag = resourceName;
+            //            dataNode.Content = resource;
+            //            dataNode.ImageKey = "resource";
+            //            dataNode.SelectedImageKey = "resource";
+            //            TreeViewNode resourceNode = new TreeViewNode() { Content = dataNode };
+            //            typeNode.Children.Add(resourceNode);
+            //        }
+            //        m_treeView.RootNodes.Add(typeNode);
+            //        typeNode.IsExpanded = false;
+            //    }
 
-                if (m_treeView.RootNodes.Count == 0)
-                {
-                    m_treeView.RootNodes.Add(new TreeViewNode() {Content= "无资源" });
-                }
-            }
-            finally
-            {
-                //m_treeView.EndUpdate();
-            }
+            //    if (m_treeView.RootNodes.Count == 0)
+            //    {
+            //        m_treeView.RootNodes.Add(new TreeViewNode() {Content= "无资源" });
+            //    }
+            //}
+            //finally
+            //{
+            //    //m_treeView.EndUpdate();
+            //}
         }
         //private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         //{
@@ -1196,44 +1090,44 @@ namespace RisohEditorWinUI3Blank
 
         private async Task SelectResource(ResourceEntry entry, bool doubleClick = false)
         {
-            if (entry == null) return;
+            //if (entry == null) return;
 
-            g_res.SetSelectedEntry(entry);
+            //g_res.SetSelectedEntry(entry);
 
-            if (entry.CanShowAsText)
-            {
-                m_codeEditor.Text = entry.GetText();
-                m_codeEditor.IsEnabled = true;
-                m_codeEditor.Background = new SolidColorBrush(Colors.White);//SystemColors.Window
-            }
-            else
-            {
-                m_codeEditor.Text = $"// 此资源类型 ({entry.Type}) 无法以文本形式显示\n// 大小: {entry.Data?.Length ?? 0} 字节";
-                m_codeEditor.IsEnabled = false;
-                m_codeEditor.Background = new SolidColorBrush(Colors.Black);//SystemColors.Control
-            }
+            //if (entry.CanShowAsText)
+            //{
+            //    m_codeEditor.Text = entry.GetText();
+            //    m_codeEditor.IsEnabled = true;
+            //    m_codeEditor.Background = new SolidColorBrush(Colors.White);//SystemColors.Window
+            //}
+            //else
+            //{
+            //    m_codeEditor.Text = $"// 此资源类型 ({entry.Type}) 无法以文本形式显示\n// 大小: {entry.Data?.Length ?? 0} 字节";
+            //    m_codeEditor.IsEnabled = false;
+            //    m_codeEditor.Background = new SolidColorBrush(Colors.Black);//SystemColors.Control
+            //}
 
-            m_hexViewer.Text = entry.Data != null ? DumpBinaryAsText(entry.Data) : "// 无数据";
+            //m_hexViewer.Text = entry.Data != null ? DumpBinaryAsText(entry.Data) : "// 无数据";
 
-            if (entry.IsImage && entry.Data != null)
-            {
-                await ShowBitmap(entry.Data);
-            }
-            else
-            {
-                image1.Source =await ToBitmapSource(entry.Data);
-                //MyTool.BitmapHelper.ParseAndDisplayBitmap(entry.Data, image1);
-                //string debugInfo = BitmapHelper.GetDetailedAnalysis(entry.Data);
-                //m_bmpView.BackgroundImage = null;
-                //m_bmpView.BackColor = SystemColors.Control;
-            }
+            //if (entry.IsImage && entry.Data != null)
+            //{
+            //    await ShowBitmap(entry.Data);
+            //}
+            //else
+            //{
+            //    image1.Source =await ToBitmapSource(entry.Data);
+            //    //MyTool.BitmapHelper.ParseAndDisplayBitmap(entry.Data, image1);
+            //    //string debugInfo = BitmapHelper.GetDetailedAnalysis(entry.Data);
+            //    //m_bmpView.BackgroundImage = null;
+            //    //m_bmpView.BackColor = SystemColors.Control;
+            //}
 
-            ChangeStatusText($"已选择: {GetResourceDisplayName(entry)}");
+            //ChangeStatusText($"已选择: {GetResourceDisplayName(entry)}");
 
-            if (doubleClick && entry.CanGuiEdit())
-            {
-                OnGuiEdit();
-            }
+            //if (doubleClick && entry.CanGuiEdit())
+            //{
+            //    OnGuiEdit();
+            //}
         }
 
         async Task<byte[]?> ReadFileFromLocalFolderAsync(string folder, string fileName)
@@ -1327,19 +1221,19 @@ namespace RisohEditorWinUI3Blank
 
         private async Task ShowBitmap(byte[] data)
         {
-            try
-            {
-                using (MemoryStream ms = new MemoryStream(data))
-                {
+            //try
+            //{
+            //    using (MemoryStream ms = new MemoryStream(data))
+            //    {
 
-                    var bmp =await  ToBitmapSource(ms.GetBuffer());
-                    image1.Source = bmp;                     
-                }
-            }
-            catch
-            {
-                image1.Source=null;
-            }
+            //        var bmp =await  ToBitmapSource(ms.GetBuffer());
+            //        image1.Source = bmp;                     
+            //    }
+            //}
+            //catch
+            //{
+            //    image1.Source=null;
+            //}
         }
 
         async Task<BitmapSource> ToBitmapSource(byte[] data)
@@ -1419,16 +1313,29 @@ namespace RisohEditorWinUI3Blank
 
         }
 
-        public int Offset = 0;
 
-        private void AddTab(TabView sender, object args)
+
+        /// <summary>
+        /// Add EditorTab
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private async void AddTab(TabView sender, object args)
         {
-            Offset++;
-            string AutoName = $"Test{Offset}";
-            EditorTab Tab = new EditorTab { Header = AutoName, Style = (Style)Application.Current.Resources["EditorTabStyle"] };
-            Tab.Tapped += Tab_Tapped;
+            var GetFilePath = await DataHelper.OpenFile(this, new List<string>
+            {
+                ".exe",
+                ".dll",
+                ".res",
+                ".rc",
+                "*"
+            });
 
-            sender.TabItems.Add(Tab);
+            if (File.Exists(GetFilePath))
+            {
+                string FileName = Path.GetFileName(GetFilePath);
+                TopTab?.Add(GetFilePath, FileName);
+            }
         }
 
         private void Tab_Tapped(object sender, TappedRoutedEventArgs e)
