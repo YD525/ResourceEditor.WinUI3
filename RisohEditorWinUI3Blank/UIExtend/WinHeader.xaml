@@ -11,17 +11,14 @@
     <Grid x:Name="Root" CornerRadius="9 9 0 0">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="70"/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Image Height="30" Width="30" VerticalAlignment="Center">
-                </Image>
-                <TextBlock Text="XXX" VerticalAlignment="Center" />
-            </StackPanel>
+            <Image  ToolTipService.ToolTip="ResourceEditor" VerticalAlignment="Center" Source="/Assets/StoreLogo.png" Stretch="Uniform" Grid.Column="0" Margin="-2 8 8 8">
+            </Image>
 
-            <Grid Grid.Column="1" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <Grid Grid.Column="1" Margin="0 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="70"/>
