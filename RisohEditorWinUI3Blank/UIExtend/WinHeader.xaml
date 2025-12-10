@@ -8,18 +8,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="Root" CornerRadius="9 9 0 0">
+    <Grid x:Name="Root" CornerRadius="9 9 0 0" Height="96">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="6*"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="48"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" ToolTipService.ToolTip="ResourceEditor" VerticalAlignment="Center" Source="/Assets/StoreLogo.png" Stretch="Uniform" Margin="0 8 8 8">
+                </Image>
 
-            <Image  ToolTipService.ToolTip="ResourceEditor" VerticalAlignment="Center" Source="/Assets/StoreLogo.png" Stretch="Uniform" Grid.Column="0" Margin="-2 8 8 8">
-            </Image>
-
-            <Grid Grid.Column="1" Margin="0 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                <MenuBar>
+                <MenuBar Grid.Column="1">
                     <MenuBarItem Title="File">
                         <MenuFlyoutItem Text="New">
                             <MenuFlyoutItem.KeyboardAccelerators>
@@ -42,7 +45,6 @@
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                     </MenuBarItem>
-
                     <MenuBarItem Title="Edit">
                         <MenuFlyoutItem Text="Undo">
                             <MenuFlyoutItem.KeyboardAccelerators>
@@ -67,7 +69,22 @@
                     </MenuBarItem>
                 </MenuBar>
             </Grid>
+<CommandBar Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="Transparent" IsOpen="False" DefaultLabelPosition="Collapsed" Height="48">
+                <AppBarButton Icon="OpenFile" Label="Open"/>
+                <AppBarButton Icon="Save" Label="Save"/>
+                <AppBarButton Label="SaveAs">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE792;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Icon="Import" Label="Import"/>
+                <AppBarButton Label="Import">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDE1;" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+            <AppBarButton Icon="Setting" HorizontalAlignment="Right" Height="40" VerticalAlignment="Center" VerticalContentAlignment="Center" Label="Setting" />
         </Grid>
-
     </Grid>
 </UserControl>
